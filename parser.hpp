@@ -6,7 +6,7 @@
 //
 // Author: Julian Adamek (Université de Genève)
 //
-// Last modified: March 2016
+// Last modified: April 2016
 //
 //////////////////////////
 
@@ -438,9 +438,9 @@ bool parseParameter(parameter * & params, const int numparam, const char * pname
 						nmax = n;
 						return false;
 					}
+					start = comma+1;
 					if (++n > nmax-2)
 						break;
-					start = comma+1;
 				}
 			}   
 			if (sscanf(start, " %lf ", pvalue+n) != 1)
@@ -500,9 +500,9 @@ bool parseParameter(parameter * & params, const int numparam, const char * pname
 						nmax = n;
 						return false;
 					}
+					start = comma+1;
 					if (++n > nmax-2)
 						break;
-					start = comma+1;
 				}
 			}   
 			if (sscanf(start, " %d ", pvalue+n) != 1)

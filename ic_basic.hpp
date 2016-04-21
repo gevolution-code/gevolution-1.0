@@ -6,7 +6,7 @@
 //
 // Author: Julian Adamek (Université de Genève)
 //
-// Last modified: February 2016
+// Last modified: April 2016
 //
 //////////////////////////
 
@@ -33,13 +33,13 @@ using namespace LATfield2;
 #define GADGET2_HEADER
 struct gadget2_header
 {
-	int npart[6];
+	unsigned int npart[6];
 	double mass[6];
 	double time;
 	double redshift;
 	int flag_sfr;
 	int flag_feedback;
-	int npartTotal[6];
+	unsigned int npartTotal[6];
 	int flag_cooling;
 	int num_files;
 	double BoxSize;
@@ -1457,7 +1457,7 @@ double generateIC_basic(metadata & sim, icsettings & ic, cosmology & cosmo, cons
 	projection_init(Sij);
 	projection_Tij_project(pcls_cdm, Sij, a, phi);
 	for (p = 0; p < cosmo.num_ncdm; p++)
-		projection_Tij_project(pcls_ncdm+i, Sij, a, phi);
+		projection_Tij_project(pcls_ncdm+p, Sij, a, phi);
 	projection_Tij_comm(Sij);
 	
 	prepareFTsource<Real>(*phi, *Sij, *Sij, 2. * fourpiG / a / (double) sim.numpts / (double) sim.numpts);	

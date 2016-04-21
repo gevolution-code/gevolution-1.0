@@ -4,7 +4,7 @@
 //
 // Author: Julian Adamek (Université de Genève)
 //
-// Last modified: January 2016
+// Last modified: April 2016
 //
 //////////////////////////
 
@@ -17,13 +17,13 @@ using namespace LATfield2;
 #define GADGET2_HEADER
 struct gadget2_header
 {
-	int npart[6];
+	unsigned int npart[6];
 	double mass[6];
 	double time;
 	double redshift;
 	int flag_sfr;
 	int flag_feedback;
-	int npartTotal[6];
+	unsigned int npartTotal[6];
 	int flag_cooling;
 	int num_files;
 	double BoxSize;
@@ -45,7 +45,7 @@ template <typename part, typename part_info, typename part_dataType>
 void Particles_gevolution<part,part_info,part_dataType>::saveGadget2(string filename, gadget2_header & hdr, const int tracer_factor)
 {
 #ifndef PCLBUFFER
-#define PCLBUFFER 1024
+#define PCLBUFFER 1048576
 #endif
 
 	float * posdata;
@@ -56,7 +56,7 @@ void Particles_gevolution<part,part_info,part_dataType>::saveGadget2(string file
 	MPI_Offset offset_pos, offset_vel, offset_ID;
 	MPI_Status status;
 	unsigned int blocksize;
-	int i;
+	unsigned int i;
 	char fname[filename.length()+1];
 	double rescale_vel = 299792.458 / sqrt(hdr.time);
 	
@@ -105,12 +105,14 @@ void Particles_gevolution<part,part_info,part_dataType>::saveGadget2(string file
 	
 	MPI_File_open(parallel.lat_world_comm(), fname, MPI_MODE_WRONLY | MPI_MODE_CREATE,  MPI_INFO_NULL, &outfile);
 	
-	offset_pos = 8 * sizeof(unsigned int) + sizeof(hdr) + hdr.npart[1] * (6 * sizeof(float) + sizeof(long));
+	offset_pos = (MPI_Offset) hdr.npart[1];
+	offset_pos *= (MPI_Offset) (6 * sizeof(float) + sizeof(long));
+	offset_pos += (MPI_Offset) (8 * sizeof(unsigned int) + sizeof(hdr));
 	MPI_File_set_size(outfile, offset_pos);
 	
-	offset_pos = (MPI_Offset) (3 * sizeof(unsigned int) + sizeof(hdr) + count * 3 * sizeof(float));
-	offset_vel = offset_pos + (MPI_Offset) (2 * sizeof(unsigned int) + (MPI_Offset) hdr.npart[1] * 3 * sizeof(float));
-	offset_ID = offset_vel + (MPI_Offset) (2 * sizeof(unsigned int) + ((MPI_Offset) hdr.npart[1] - count) * 3 * sizeof(float) + count * sizeof(long));
+	offset_pos = (MPI_Offset) (3 * sizeof(unsigned int) + sizeof(hdr)) + ((MPI_Offset) count) * ((MPI_Offset) (3 * sizeof(float)));
+	offset_vel = offset_pos + (MPI_Offset) (2 * sizeof(unsigned int)) + ((MPI_Offset) hdr.npart[1]) * ((MPI_Offset) (3 * sizeof(float)));
+	offset_ID = offset_vel + (MPI_Offset) (2 * sizeof(unsigned int)) + ((MPI_Offset) hdr.npart[1] - (MPI_Offset) count) * ((MPI_Offset) (3 * sizeof(float))) + ((MPI_Offset) count) * ((MPI_Offset) sizeof(long));
 	
 	if (parallel.rank() == 0)
 	{

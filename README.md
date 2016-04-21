@@ -1,6 +1,4 @@
-# gevolution-1.0
-
-This is the public repository for the gevolution cosmological N-body code.
+# gevolution-1.0 (patch 1)
 
 Copyright (c) 2015-2016 Julian Adamek
 (Université de Genève & Observatoire de Paris)
@@ -48,7 +46,7 @@ For further information, please refer to the User Manual (manual.pdf)
 ## Credits
 
 If you use gevolution for scientific work, we kindly ask you to cite
-*Adamek J., Daverio D., Durrer R., and Kunz M., Nature Phys. (2016)*
+*Adamek J., Daverio D., Durrer R., and Kunz M., Nature Phys. 12, 346 (2016)*
 in your publications.
 
 For bug reports and other important feedback you can contact the authors,
