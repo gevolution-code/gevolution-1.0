@@ -1,4 +1,6 @@
-# gevolution-1.0 (patch 1)
+# gevolution-1.0 (archived)
+
+*This repository has been archived, please refer to the most recent code release*
 
 Copyright (c) 2015-2016 Julian Adamek
 (Université de Genève & Observatoire de Paris)
